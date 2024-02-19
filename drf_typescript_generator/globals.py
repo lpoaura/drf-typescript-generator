@@ -1,13 +1,15 @@
 from rest_framework import serializers
+import pkg_resources
+from packaging import version
 
+drf_version = pkg_resources.get_distribution("djangorestframework").version
 
 DEFAULT_TYPE = 'any'
 
 MAPPING = {
     # boolean fields
     serializers.BooleanField: 'boolean',
-    serializers.NullBooleanField: 'boolean',
-
+    
     # string fields
     serializers.CharField: 'string',
     serializers.EmailField: 'string',
@@ -39,6 +41,9 @@ MAPPING = {
     bool: 'boolean'
     # TODO: add more
 }
+
+if version.parse(drf_version) < version.parse("3.14.0"):
+    MAPPING[serializers.NullBooleanField] = 'boolean'
 
 # field types which require special treatment
 SPECIAL_FIELD_TYPES = [
